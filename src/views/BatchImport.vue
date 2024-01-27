@@ -23,6 +23,8 @@
             <button @click="handleInput" class="custom-button">获取个人信息</button>
             <button @click="oreFriendtrade_takecoin" class="custom-button">一键提币</button>
             <button @click="oreFriendtrade_takecoin" class="custom-button">自动提币</button>
+            <button @click="oreBooster" class="custom-button">一键使用Booster翻倍卡</button>
+            <button @click="oreAutoBooster" class="custom-button">一键自动使用Booster翻倍卡</button>
         </div>
         <table>
             <tr>
@@ -61,7 +63,8 @@
                 <td><img src="../assets/img/up.jpg" alt='up' class='icon'>{{ item.points }}</td>
                 <td><img src="../assets/img/matic.jpg" alt='马蹄' class='icon'>{{ item.balance }}</td>
                 <td>
-                    <button class="custom-button" @click="booster(item.token)">Booster翻倍卡使用————X{{item.multiplyCardNum}}</button>
+                    <button class="custom-button" @click="booster(item.token)">Booster翻倍卡使用—X{{item.multiplyCardNum}}</button>
+                    <button class="custom-button" @click="autoBooster(item.token)">Booster翻倍卡自动使用—X{{item.multiplyCardNum}}</button>
                     <button class="custom-button" @click="friendtrade_takecoin(item.token)">提币</button>
                 </td>
             </tr>
@@ -114,28 +117,6 @@
                         });
                 });
             },
-            //自动提取个人lfg代币
-            auto_takecoin() {
-                alert("16个小时后自动提币");
-                //一键提取个人lfg代币
-                this.oreFriendtrade_takecoin();
-                setInterval(() => {
-                    this.tokenList.forEach(token=>{
-                        fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_takecoin', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                token: token,
-                            })
-                        }).then(response => response.json())
-                            .then(data => {
-                            });
-                    })
-                    setTimeout(this.userInfo(),4000) // 提币完成更新个人信息
-                },(60 * 60 * 1000)+2000);
-            },
             updateUserInfoList(userInfo, token) {
                 if (userInfo.platformData.platformMap[1] === undefined) {
                     this.userInfoList.push({
@@ -183,6 +164,35 @@
                         this.userInfo() // booster翻倍卡完成更新个人信息
                     });
             },
+            //自动使用booster翻倍卡
+            autoBooster(token){
+                fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_boost_claimcoin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: token,
+                    })
+                }).then(response => response.json())
+                    .then(data => {
+                        this.userInfo() // booster翻倍卡完成更新个人信息
+                    });
+                setInterval(() => {
+                    fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_boost_claimcoin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: token,
+                        })
+                    }).then(response => response.json())
+                        .then(data => {
+                            this.userInfo() // booster翻倍卡完成更新个人信息
+                        });
+                },(8*60 * 60 * 1000)+2000);
+            },
             //一键提取个人lfg代币
             oreFriendtrade_takecoin() {
                 this.tokenList.forEach(token=>{
@@ -199,6 +209,64 @@
                         });
                 })
                 setTimeout(this.userInfo(),4000) // 提币完成更新个人信息
+            },
+            //自动提取个人lfg代币
+            auto_takecoin() {
+                //一键提取个人lfg代币
+                this.oreFriendtrade_takecoin();
+                setInterval(() => {
+                    this.tokenList.forEach(token=>{
+                        fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_takecoin', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                token: token,
+                            })
+                        }).then(response => response.json())
+                            .then(data => {
+                            });
+                    })
+                    setTimeout(this.userInfo(),4000) // 提币完成更新个人信息
+                },(60 * 60 * 1000)+2000);
+            },
+            //一键使用Booster翻倍卡
+            oreBooster() {
+                this.tokenList.forEach(token=>{
+                    fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_boost_claimcoin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: token,
+                        })
+                    }).then(response => response.json())
+                        .then(data => {
+                        });
+                })
+                setTimeout(this.userInfo(),4000) // 提币完成更新个人信息
+            },
+            //一键自动使用Booster翻倍卡
+            oreAutoBooster() {
+                this.oreBooster();
+                setInterval(() => {
+                    this.tokenList.forEach(token=>{
+                        fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_takecoin', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                token: token,
+                            })
+                        }).then(response => response.json())
+                            .then(data => {
+                            });
+                    })
+                    setTimeout(this.userInfo(),4000) // 提币完成更新个人信息
+                },(8 * 60 * 60 * 1000)+2000);
             },
             //提取个人lfg代币
             friendtrade_takecoin(token) {
