@@ -113,10 +113,10 @@ export default {
                 if(!valid) {
                     return this.$message.error('账户密码错误，请仔细填写信息！');
                 }
-                if(this.loginForm.username==='turnup' && this.loginForm.password ==='lfg123'){
+                if(this.loginForm.username==='qifei' && this.loginForm.password ==='turn123'){
                     sessionStorage.setItem('token', "登录成功");
                     //页面跳转
-                    this.$router.push({ path: '/lfg' });
+                    this.$router.push({ path: '/lfgMint' });
                 }else {
                     return this.$message.error('账户密码错误，请仔细填写信息！');
                 }
