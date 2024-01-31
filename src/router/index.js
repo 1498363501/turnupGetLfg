@@ -5,6 +5,9 @@ import axios from "axios";
 import Login from '@/views/Login.vue';
 import LFG from '@/views/LfgMint.vue'
 import Batch from '@/views/BatchImport.vue'
+import BatchTask from '@/views/BatchTask.vue'
+import Fighting from '@/views/Fighting.vue'
+import AutoFighting from '@/views/AutoFighting.vue'
 import menuList from "@/utils/menus";
 // import {formatMenu} from "@/utils/initMenu";
 
@@ -20,12 +23,24 @@ export const constantRoutes = [
         component: Login,
     },
     {
-        path: '/lfg',
+        path: '/lfgMint',
         component: LFG,
     },
     {
         path: '/batch',
         component: Batch,
+    },
+    {
+        path: '/batchTask',
+        component: BatchTask,
+    },
+    {
+        path: '/fighting',
+        component: Fighting,
+    },
+    {
+        path: '/autoFighting',
+        component: AutoFighting,
     },
 ];
 
