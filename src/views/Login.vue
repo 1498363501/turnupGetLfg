@@ -96,7 +96,7 @@ export default {
     },
     created() {
         this.imgChange()
-        sessionStorage.setItem('token', "");
+        sessionStorage.setItem('go', "");
         //键盘监听事件
         //页面加载完全局监听键盘事件，然后调用函数
         document.addEventListener("keyup",this.keyDown)
@@ -113,8 +113,8 @@ export default {
                 if(!valid) {
                     return this.$message.error('账户密码错误，请仔细填写信息！');
                 }
-                if(this.loginForm.username==='qifei' && this.loginForm.password ==='turn123'){
-                    sessionStorage.setItem('token', "登录成功");
+                if(this.loginForm.username==='go' && this.loginForm.password ==='123456'){
+                    sessionStorage.setItem('go', "登录成功");
                     //页面跳转
                     this.$router.push({ path: '/lfgMint' });
                 }else {
