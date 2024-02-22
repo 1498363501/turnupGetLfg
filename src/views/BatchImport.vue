@@ -20,27 +20,34 @@
             ></textarea>
         </div>
         <div class="button-container">
-            <button class="custom-button" @click="goBack()">返回首页</button>
             <button @click="handleInput" class="custom-button">获取个人信息</button>
             <button @click="oreFriendtrade_takecoin" class="custom-button">一键提币</button>
             <button @click="oreFriendtrade_takecoin" class="custom-button">自动提币</button>
             <button @click="oreBooster" class="custom-button">一键使用Booster翻倍卡</button>
             <button @click="oreAutoBooster" class="custom-button">一键自动使用Booster翻倍卡</button>
+            <button class="custom-button" @click="goBack()">返回首页</button>
         </div>
         <table>
             <tr>
+                <th>序号</th>
                 <th>名称</th>
                 <th>购买钥匙ID</th>
                 <th>等级</th>
                 <th>Power</th>
-                <th>LFG代币数量</th>
+                <th>战斗积分</th>
+                <th>战斗等级</th>
+                <th>锁定LFG代币数量</th>
+                <th>可索赔LFG解锁代币数量</th>
+                <th>每日解锁LFG代币数量</th>
+                <th>背包LFG代币数量</th>
                 <th>矿池LFG代币数量</th>
                 <th>UP数量</th>
                 <th>马蹄数量</th>
                 <th>操作功能</th>
             </tr>
             <tbody>
-            <tr v-for="item in userInfoList" :key="item.id">
+            <tr v-for="(item,index) in userInfoList" :key="item.id">
+                <td>{{index+1}}</td>
                 <td>{{item.displayName}}</td>
                 <td>{{item.accountName}}</td>
                 <td>
@@ -59,20 +66,25 @@
                     <span v-else-if="item.tierId=== 13"><img src="../assets/img/13.jpg" alt='13级' class='icon'></span>
                 </td>
                 <td>{{ item.power }}</td>
-                <td><img src="../assets/img/lfg.jpg" alt='lfg背包' class='icon'>{{ item.vCoin }}</td>
+                <td><img src="../assets/img/battlePoint_icon.jpg" alt='战斗积分' class='icon'>{{ item.battlePoints }}</td>
+                <td>{{ item.battlePointLevel }}</td>
+                <td><img src="../assets/img/lfg.jpg" alt='锁定lfg' class='icon'>{{ item.virtualLFG }}</td>
+                <td><img src="../assets/img/lfg.jpg" alt='可索赔lfg' class='icon'>{{ item.withDrawableLfg }}</td>
+                <td><img src="../assets/img/lfg.jpg" alt='每日解锁lfg' class='icon'>{{ item.releaseLfgPerDay }}</td>
+                <td><img src="../assets/img/lfg.jpg" alt='lfg背包' class='icon'>{{ item.lfgBalance }}</td>
                 <td><img src="../assets/img/lfg.jpg" alt='lfg矿池' class='icon'>{{ item.claimCoin }}</td>
                 <td><img src="../assets/img/up.jpg" alt='up' class='icon'>{{ item.points }}</td>
                 <td><img src="../assets/img/matic.jpg" alt='马蹄' class='icon'>{{ item.balance }}</td>
                 <td>
                     <button class="custom-button" @click="booster(item.token)">Booster翻倍卡使用—X{{item.multiplyCardNum}}</button>
-                    <button class="custom-button" @click="autoBooster(item.token)">Booster翻倍卡自动使用—X{{item.multiplyCardNum}}</button>
-                    <button class="custom-button" @click="friendtrade_takecoin(item.token)">提币</button>
+<!--                    <button class="custom-button" @click="autoBooster(item.token)">Booster翻倍卡自动使用—X{{item.multiplyCardNum}}</button>-->
+<!--                    <button class="custom-button" @click="friendtrade_takecoin(item.token)">提币</button>-->
 <!--                    <button class="custom-button" @click="showDialog(item.accountName,item.token,item.userId)">挖矿</button>-->
                 </td>
             </tr>
             </tbody>
         </table>
-        <!-- 弹出框 -->
+<!--         弹出框 -->
 <!--        <el-dialog :visible.sync="dialogVisible" :title="title" >-->
 <!--            <h2>管理的Club信息</h2>-->
 <!--            <h4>使用说明和相关解释：</h4>-->
@@ -244,43 +256,113 @@
                         .then(response => response.json())
                         .then(res => {
                             const userInfo = res.data;
-                            this.updateUserInfoList(userInfo, token);
+                            this.friendtrade_virtual_lfg(userInfo, token);
                         });
                 });
             },
-
+            //获取背包代币信息
+           async friendtrade_virtual_lfg(userInfo, token) {
+               await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_virtual_lfg', {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json'
+                   },
+                   body: JSON.stringify({
+                       token: token
+                   })
+               })
+                   .then(response => response.json())
+                   .then(res => {
+                       if(res.data.virtualLFG>0 && res.data.lfgUnlockStatus===1){
+                           this.updateUserInfoList(userInfo, token,res.data.virtualLFG);
+                       }
+                       // else {
+                       //     this.userInfoList.push({
+                       //         withDrawableLfg: 0,
+                       //         releaseLfgPerDay: 0,
+                       //         virtualLFG: 0,
+                       //         userId: userInfo.userId,
+                       //         token: token,
+                       //         multiplyCardNum: userInfo.selfData.multiplyCardNum,
+                       //         displayName: userInfo.platformData.defaultName,
+                       //         accountName: userInfo.platformData.defaultName,
+                       //         tierId: userInfo.selfData.tierId,
+                       //         power: userInfo.selfData.power,
+                       //         lfgBalance: userInfo.selfData.lfgBalance,
+                       //         claimCoin: userInfo.selfData.claimCoin,
+                       //         points: userInfo.selfData.points,
+                       //         battlePoints: userInfo.selfData.battlePoints,
+                       //         battlePointLevel: userInfo.selfData.battlePointLevel,
+                       //         balance: userInfo.selfData.balance.substring(0, 7),
+                       //     });
+                       // }
+                   });
+            },
             //存储个人信息数组
-            updateUserInfoList(userInfo, token) {
+           async updateUserInfoList(userInfo, token,virtualLFG) {
                 if (userInfo.platformData.platformMap[1] === undefined) {
-                    this.userInfoList.push({
-                        userId: userInfo.userId,
-                        token: token,
-                        multiplyCardNum: userInfo.selfData.multiplyCardNum,
-                        displayName: userInfo.platformData.defaultName,
-                        accountName: userInfo.platformData.defaultName,
-                        tierId: userInfo.selfData.tierId,
-                        power: userInfo.selfData.power,
-                        vCoin: userInfo.selfData.vCoin,
-                        claimCoin: userInfo.selfData.claimCoin,
-                        points: userInfo.selfData.points,
-                        balance: userInfo.selfData.balance.substring(0, 7),
-                    });
+                   await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_locklfg_info', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: token
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(res => {
+                            this.userInfoList.push({
+                                withDrawableLfg: res.data.withDrawableLfg,
+                                releaseLfgPerDay: res.data.releaseLfgPerDay,
+                                virtualLFG: virtualLFG,
+                                userId: userInfo.userId,
+                                token: token,
+                                multiplyCardNum: userInfo.selfData.multiplyCardNum,
+                                displayName: userInfo.platformData.defaultName,
+                                accountName: userInfo.platformData.defaultName,
+                                tierId: userInfo.selfData.tierId,
+                                power: userInfo.selfData.power,
+                                lfgBalance: userInfo.selfData.lfgBalance,
+                                claimCoin: userInfo.selfData.claimCoin,
+                                points: userInfo.selfData.points,
+                                battlePoints: userInfo.selfData.battlePoints,
+                                battlePointLevel: userInfo.selfData.battlePointLevel,
+                                balance: userInfo.selfData.balance.substring(0, 7),
+                            });
+                        });
                 } else {
-                    this.userInfoList.push({
-                        userId: userInfo.userId,
-                        token: token,
-                        multiplyCardNum: userInfo.selfData.multiplyCardNum,
-                        displayName: userInfo.platformData.platformMap[1].displayName,
-                        accountName: userInfo.platformData.platformMap[1].accountName,
-                        tierId: userInfo.selfData.tierId,
-                        power: userInfo.selfData.power,
-                        vCoin: userInfo.selfData.vCoin,
-                        claimCoin: userInfo.selfData.claimCoin,
-                        points: userInfo.selfData.points,
-                        balance: userInfo.selfData.balance.substring(0, 7),
-                    });
+                    await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_locklfg_info', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: token
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(res => {
+                            this.userInfoList.push({
+                                withDrawableLfg: res.data.withDrawableLfg,
+                                releaseLfgPerDay: res.data.releaseLfgPerDay,
+                                virtualLFG: virtualLFG,
+                                userId: userInfo.userId,
+                                token: token,
+                                multiplyCardNum: userInfo.selfData.multiplyCardNum,
+                                displayName: userInfo.platformData.platformMap[1].displayName,
+                                accountName: userInfo.platformData.platformMap[1].accountName,
+                                tierId: userInfo.selfData.tierId,
+                                power: userInfo.selfData.power,
+                                lfgBalance: userInfo.selfData.lfgBalance,
+                                claimCoin: userInfo.selfData.claimCoin,
+                                points: userInfo.selfData.points,
+                                battlePoints: userInfo.selfData.battlePoints,
+                                battlePointLevel: userInfo.selfData.battlePointLevel,
+                                balance: userInfo.selfData.balance.substring(0, 7),
+                            });
+                        });
                 }
-                console.log("个人集合信息", this.userInfoList);
             },
 
             //booster翻倍卡
