@@ -10,13 +10,10 @@
             <button class="custom-button" @click="userInfo()">个人信息</button>
             <button class="custom-button" @click="booster()">Booster翻倍卡使用————X{{multiplyCardNum}}</button>
             <button id="countdown" class="custom-button" @click="friendtrade_takecoin()" :disabled="countingDown">{{countdown}}</button>
-            <button id="autoCountdown" class="custom-button" @click="auto_takecoin()">自动一键提币</button>
-        </div>
-        <div>
-            <button class="custom-button" @click="batchTask()">批量挖矿功能</button>
-            <button class="custom-button" @click="batchImport()">批量提币功能</button>
-            <button class="custom-button" @click="startTaskExecution()">开始3级-5级任务自动执行</button>
-            <button class="custom-button" @click="stopTaskExecution()">停止任务执行</button>
+            <button class="custom-button" @click="apeButton()">自动挖矿</button>
+            <button id="autoCountdown" class="custom-button" @click="auto_takecoin()">自动全部提币</button>
+            <button class="custom-button" @click="batchTask()">批量挖矿</button>
+            <button class="custom-button" @click="batchImport()">批量提币</button>
             <button class="custom-button" @click="fighting()">搜索打架</button>
             <button class="custom-button" @click="autoFighting()">自动打架</button>
         </div>
@@ -26,41 +23,45 @@
                 <th>购买钥匙ID</th>
                 <th>等级</th>
                 <th>Power</th>
-                <th>LFG代币数量</th>
+                <th>战斗积分</th>
+                <th>战斗等级</th>
+                <th>锁定LFG代币数量</th>
+                <th>可索赔LFG解锁代币数量</th>
+                <th>每日解锁LFG代币数量</th>
+                <th>背包LFG代币数量</th>
                 <th>矿池LFG代币数量</th>
                 <th>UP数量</th>
                 <th>马蹄数量</th>
             </tr>
             <tbody>
                 <tr v-for="item in userInfoList" :key="item.id">
+                    <td>{{item.displayName}}</td>
+                    <td>{{item.accountName}}</td>
                     <td>
-                        <span v-if="item.platformData.platformMap['1'] === undefined ">{{item.platformData.defaultName}}</span>
-                        <span v-else>{{item.platformData.platformMap["1"].displayName}}</span>
+                        <span v-if="item.tierId=== 1"><img src="../assets/img/1.jpg" alt='1级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 2"><img src="../assets/img/2.jpg" alt='2级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 3"><img src="../assets/img/3.jpg" alt='3级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 4"><img src="../assets/img/4.jpg" alt='4级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 5"><img src="../assets/img/5.jpg" alt='5级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 6"><img src="../assets/img/6.jpg" alt='6级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 7"><img src="../assets/img/7.jpg" alt='7级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 8"><img src="../assets/img/8.jpg" alt='8级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 9"><img src="../assets/img/9.jpg" alt='9级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 10"><img src="../assets/img/10.jpg" alt='10级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 11"><img src="../assets/img/11.jpg" alt='11级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 12"><img src="../assets/img/12.jpg" alt='12级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 13"><img src="../assets/img/13.jpg" alt='13级' class='icon'></span>
                     </td>
-                    <td>
-                        <span v-if="item.platformData.platformMap['1'] === undefined ">{{item.platformData.defaultName}}</span>
-                        <span v-else>{{item.platformData.platformMap["1"].accountName}}</span>
-                    </td>
-                    <td>
-                        <span v-if="item.selfData.tierId=== 1"><img src="../assets/img/1.jpg" alt='1级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 2"><img src="../assets/img/2.jpg" alt='2级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 3"><img src="../assets/img/3.jpg" alt='3级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 4"><img src="../assets/img/4.jpg" alt='4级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 5"><img src="../assets/img/5.jpg" alt='5级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 6"><img src="../assets/img/6.jpg" alt='6级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 7"><img src="../assets/img/7.jpg" alt='7级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 8"><img src="../assets/img/8.jpg" alt='8级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 9"><img src="../assets/img/9.jpg" alt='9级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 10"><img src="../assets/img/10.jpg" alt='10级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 11"><img src="../assets/img/11.jpg" alt='11级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 12"><img src="../assets/img/12.jpg" alt='12级' class='icon'></span>
-                        <span v-else-if="item.selfData.tierId=== 13"><img src="../assets/img/13.jpg" alt='13级' class='icon'></span>
-                    </td>
-                    <td>{{ item.selfData.power }}</td>
-                    <td><img src="../assets/img/lfg.jpg" alt='lfg背包' class='icon'>{{ item.selfData.vCoin }}</td>
-                    <td><img src="../assets/img/lfg.jpg" alt='lfg矿池' class='icon'>{{ item.selfData.claimCoin }}</td>
-                    <td><img src="../assets/img/up.jpg" alt='up' class='icon'>{{ item.selfData.points }}</td>
-                    <td><img src="../assets/img/matic.jpg" alt='马蹄' class='icon'>{{ item.selfData.balance.substring(0, 7) }}</td>
+                    <td>{{ item.power }}</td>
+                    <td><img src="../assets/img/battlePoint_icon.jpg" alt='战斗积分' class='icon'>{{ item.battlePoints }}</td>
+                    <td>{{ item.battlePointLevel }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='锁定lfg' class='icon'>{{ item.virtualLFG }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='可索赔lfg' class='icon'>{{ item.withDrawableLfg }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='每日解锁lfg' class='icon'>{{ item.releaseLfgPerDay }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='lfg背包' class='icon'>{{ item.lfgBalance }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='lfg矿池' class='icon'>{{ item.claimCoin }}</td>
+                    <td><img src="../assets/img/up.jpg" alt='up' class='icon'>{{ item.points }}</td>
+                    <td><img src="../assets/img/matic.jpg" alt='马蹄' class='icon'>{{ item.balance }}</td>
                 </tr>
             </tbody>
         </table>
@@ -71,6 +72,7 @@
         <h4>3、温馨提示：自动化挖矿功能，如果关闭了页面，定时任务就会失效。就要重新执行了</h4>
         <div class="input-container" style="margin: 10px">
             <button class="custom-button" @click="oreButton()">一键收矿</button>
+            <button class="custom-button" @click="mintButton()">一键挖矿</button>
             <button class="custom-button" @click="energyButton()">一键补充能量(CZ's UAE Airlift)</button>
             <button class="white-button" @click="oneLevelTButton()">一键挖1级矿(SBF's Bahamas Buyout)</button>
             <button class="white-button" @click="oneLevelButton()">一键挖1级矿(Sun's Club Million Bash)</button>
@@ -84,7 +86,6 @@
             <button class="custom-button" @click="fiveLevelButton()">一键挖5级矿(Launch L2 Outdo Blast)</button>
             <button class="custom-button" @click="sixLevelTButton()">一键挖6级矿(NYC Lambo Drift with Arthur)</button>
             <button class="custom-button" @click="sixLevelButton()">一键挖6级矿(Cobie Stream Bag Dump)</button>
-            <button class="custom-button" @click="apeButton()">自动挖3级矿(Ape Fest Party with Machi)</button>
 <!--            <button class="blue-button" @click="sevenLevelTButton()">一键挖7级矿(Swallow Do Kwon Wallet)</button>-->
 <!--            <button class="blue-button" @click="sevenLevelButton()">一键挖7级矿(Opensea Insider Case Probe)</button>-->
 <!--            <button class="blue-button" @click="eightLevelTButton()">一键挖8级矿(Inverse Cramer for Retirement)</button>-->
@@ -95,6 +96,8 @@
         </div>
         <div class="input-container" style="margin: 20px">
             <button class="custom-button" @click="userInfo()">刷新Club信息</button>
+            <button class="custom-button" @click="oreButton()">一键收矿</button>
+            <button class="custom-button" @click="mintButton()">一键挖矿</button>
         </div>
         <table>
             <tr>
@@ -110,8 +113,6 @@
                 <th>挖矿状态</th>
                 <th>挖矿开始时间</th>
                 <th>挖矿结束时间</th>
-                <th>恢复功能</th>
-                <th>自动功能</th>
             </tr>
             <tbody>
                 <tr v-for="(item,index) in userList" :key="item.id">
@@ -165,21 +166,6 @@
                        {{formatTime(item.workEndTimestamp)}}
                     </td>
                     <td v-else></td>
-                    <td v-if="item.workStartTimestamp === 0 &&  userId === item.managerId">
-                        <button class="custom-button" @click="energyTButton(item)">补充能量</button>
-                    </td>
-                    <td v-else>
-                    </td>
-                    <td v-if="item.workStartTimestamp === 0 &&  userId === item.managerId" style="width: 370px">
-                        <button class="white-button" @click="automationOne(item)">自动挖1级</button>
-                        <button class="white-button" @click="automationTwo(item)">自动挖2级(EAS)</button>
-                        <button class="white-button" @click="automationTwoMint(item)">自动挖2级(BMC)</button>
-                        <button class="white-button" @click="automationThree(item)">自动挖3级(APE)</button>
-                        <button class="white-button" @click="automationThreeMint(item)">自动挖3级(SEC)</button>
-                        <button class="white-button" @click="automationFourMint(item)">自动挖4级(ZSH)</button>
-                    </td>
-                    <td v-else>
-                    </td>
                 </tr>
             </tbody>
         </table>
@@ -249,6 +235,7 @@ export default {
             curWorkingEmployeeNum: '',
             userId: '',
             textContentTip: '',
+            userIdList: [],
             userIdArray: [],
             userInfoList: [],
             userList: [],
@@ -261,17 +248,18 @@ export default {
     },
     created() {
         setInterval(this.getManagerClubInfo(), 120000); // 每分钟执行一次任务
+        setInterval(this.oreButton(), 600000); // 每一小时执行一次任务
     },
     methods: {
         //搜索打架
         fighting(){
             //页面跳转
-            this.$router.push({ path: '/fighting' });
+            this.$router.push({ path: '/fight' });
         },
         //自动打架
         autoFighting(){
             //页面跳转
-            this.$router.push({ path: '/autoFighting' });
+            this.$router.push({ path: '/autoFight' });
         },
         // 获取个人信息
         async userInfo() {
@@ -279,28 +267,133 @@ export default {
             this.userInfoList = [];
             this.userList = [];
             this.countingDown = false;
+            this.countingDown = false;
             this.countdown = "提矿池lfg币";
+            const token = this.token;
             await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/userinfo', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    token: this.token,
+                    token: token,
                     userId: 0
                 })
             }).then(response => response.json())
                 .then(res => {
                     const userInfo = res.data;
                     this.multiplyCardNum = res.data.selfData.multiplyCardNum;
-                    this.userInfoList.push(userInfo);
+                    this.friendtrade_virtual_lfg(userInfo, token);
+
                     this.userId = userInfo.userId;
 
                     this.earnInfo(); //获取个人下次提币的时间
                     this.getManagerClubInfo();//获取管理的club信息
                 });
         },
-
+        //获取背包代币信息
+        async friendtrade_virtual_lfg(userInfo, token) {
+            await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_virtual_lfg', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    token: token
+                })
+            })
+                .then(response => response.json())
+                .then(res => {
+                    if(res.data.virtualLFG>0 && res.data.lfgUnlockStatus===1){
+                        this.updateUserInfoList(userInfo, token,res.data.virtualLFG);
+                    }else {
+                        this.userInfoList.push({
+                            withDrawableLfg: 0,
+                            releaseLfgPerDay: 0,
+                            virtualLFG: 0,
+                            userId: userInfo.userId,
+                            token: token,
+                            multiplyCardNum: userInfo.selfData.multiplyCardNum,
+                            displayName: userInfo.platformData.defaultName,
+                            accountName: userInfo.platformData.defaultName,
+                            tierId: userInfo.selfData.tierId,
+                            power: userInfo.selfData.power,
+                            lfgBalance: userInfo.selfData.lfgBalance,
+                            claimCoin: userInfo.selfData.claimCoin,
+                            points: userInfo.selfData.points,
+                            battlePoints: userInfo.selfData.battlePoints,
+                            battlePointLevel: userInfo.selfData.battlePointLevel,
+                            balance: userInfo.selfData.balance.substring(0, 7),
+                        });
+                    }
+                });
+        },
+        //存储个人信息数组
+        async updateUserInfoList(userInfo, token,virtualLFG) {
+            if (userInfo.platformData.platformMap[1] === undefined) {
+                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_locklfg_info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: token
+                    })
+                })
+                    .then(response => response.json())
+                    .then(res => {
+                        this.userInfoList.push({
+                            withDrawableLfg: res.data.withDrawableLfg,
+                            releaseLfgPerDay: res.data.releaseLfgPerDay,
+                            virtualLFG: virtualLFG,
+                            userId: userInfo.userId,
+                            token: token,
+                            multiplyCardNum: userInfo.selfData.multiplyCardNum,
+                            displayName: userInfo.platformData.defaultName,
+                            accountName: userInfo.platformData.defaultName,
+                            tierId: userInfo.selfData.tierId,
+                            power: userInfo.selfData.power,
+                            lfgBalance: userInfo.selfData.lfgBalance,
+                            claimCoin: userInfo.selfData.claimCoin,
+                            points: userInfo.selfData.points,
+                            battlePoints: userInfo.selfData.battlePoints,
+                            battlePointLevel: userInfo.selfData.battlePointLevel,
+                            balance: userInfo.selfData.balance.substring(0, 7),
+                        });
+                    });
+            } else {
+                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_locklfg_info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: token
+                    })
+                })
+                    .then(response => response.json())
+                    .then(res => {
+                        this.userInfoList.push({
+                            withDrawableLfg: res.data.withDrawableLfg,
+                            releaseLfgPerDay: res.data.releaseLfgPerDay,
+                            virtualLFG: virtualLFG,
+                            userId: userInfo.userId,
+                            token: token,
+                            multiplyCardNum: userInfo.selfData.multiplyCardNum,
+                            displayName: userInfo.platformData.platformMap[1].displayName,
+                            accountName: userInfo.platformData.platformMap[1].accountName,
+                            tierId: userInfo.selfData.tierId,
+                            power: userInfo.selfData.power,
+                            lfgBalance: userInfo.selfData.lfgBalance,
+                            claimCoin: userInfo.selfData.claimCoin,
+                            points: userInfo.selfData.points,
+                            battlePoints: userInfo.selfData.battlePoints,
+                            battlePointLevel: userInfo.selfData.battlePointLevel,
+                            balance: userInfo.selfData.balance.substring(0, 7),
+                        });
+                    });
+            }
+        },
         //booster翻倍卡
         booster(){
             const token=this.token;
@@ -408,6 +501,7 @@ export default {
         async getManagerClubInfo() {
             const token=this.token;
             const userId=this.userId;
+            this.userIdList=[];
             this.userIdArray=[];
             this.userList=[];
             await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/portfolio', {
@@ -423,55 +517,12 @@ export default {
                     res.data.holding.forEach(e => {
                         if (userId === e.managerId) {
                             this.userList.push(e);
+                            this.userIdList.push(e.userId);
                             this.userIdArray.push({userId: e.userId});
                         }
-                        // 倒计时
-                        // const currentTime = Math.floor(Date.now() / 1000);
-                        // let timestamp = e.workEndTimestamp - currentTime;
-                        // if (timestamp >0) {
-                        //     let timer =  setInterval(() => {
-                        //         // 计算小时、分钟、秒
-                        //         let hours = Math.floor(timestamp / 3600);
-                        //         let minutes = Math.floor((timestamp % 3600) / 60);
-                        //         let remainingSeconds = timestamp % 60;
-                        //
-                        //         // 格式化时间显示，例如 1:3:5 而不是 01:03:05
-                        //         hours = String(hours).padStart(2, '0');
-                        //         minutes = String(minutes).padStart(2, '0');
-                        //         remainingSeconds = String(remainingSeconds).padStart(2, '0');
-                        //
-                        //         if (timestamp > 0) {
-                        //             timestamp--;
-                        //             document.getElementById(e.userId).innerText= "挖矿结束倒计时: " + hours + ":" + minutes + ":" + remainingSeconds;
-                        //         } else {
-                        //             clearInterval(timer);
-                        //         }
-                        //     }, 1000);
-                        // }
                     })
+                    this.oreButton();
                 });
-        },
-        //判断能量是否足够
-        isEnergyLess(currentTask) {
-            if(currentTask.energy<20 && currentTask.tierId===3){
-                console.log(currentTask.energy,"任务3");
-                return currentTask.energy < 20;
-            }else if(currentTask.energy<35 && currentTask.tierId===4){
-                console.log(currentTask.energy,"任务4");
-                return currentTask.energy < 35;
-            }else if(currentTask.energy<35 && currentTask.tierId===5){
-                console.log(currentTask.energy,"任务5");
-                return currentTask.energy < 35;
-            }else if(currentTask.energy<35 && currentTask.tierId===6){
-                console.log(currentTask.energy,"任务6");
-                return currentTask.energy < 35;
-            }else if(currentTask.energy<35 && currentTask.tierId===7){
-                console.log(currentTask.energy,"任务7");
-                return currentTask.energy < 35;
-            }else if(currentTask.energy<35 && currentTask.tierId===8){
-                console.log(currentTask.energy,"任务8");
-                return currentTask.energy < 35;
-            }
         },
         //开始执行任务
         startTaskExecution() {
@@ -481,162 +532,6 @@ export default {
         // 停止定时任务执行
         stopTaskExecution() {
             clearInterval(this.intervalId); // 停止定时任务执行
-        },
-        //恢复能量
-        async executeEnergyRecoveryTask(e) {
-            const token=this.token;
-            //收矿
-            this.automationOreButton(e.userId);
-            await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    workId: 2,
-                    token: token,
-                    emplyeeIds: [e.userId],
-                })
-            }).then(response => response.json())
-                .then(res => {
-                });
-            // 执行能量回复任务的逻辑
-            console.log(e.profile.accountName+'执行能量回复任务');
-        },
-        //执行挖矿
-        async executeTask(user,workId) {
-            const token=this.token;
-            //收矿
-            this.automationOreButton(user.userId);
-            await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    emplyeeIds: [user.userId],
-                    token: token,
-                    workId: workId,
-                })
-            }).then(response => response.json())
-                .then(res => {
-                    // 执行具体的任务逻辑
-                    console.log(user.profile.accountName+`执行任务：workId ${workId}`+res);
-                });
-        },
-        //自动执行任务
-        async autoExecuteTasks() {
-            console.log(this.userList)
-            for (let i = 0; i < this.userList.length; i++) {
-                const currentTask = this.userList[i];
-                //收矿
-                this.automationOreButton(currentTask.userId);
-                if (this.isEnergyLess(currentTask)) {
-                    this.executeEnergyRecoveryTask(currentTask);
-                } else {
-                    if (currentTask.tierId >= 4 && this.tasks.find(task => task.workId === 101 && task.clubCount <= 1)) {
-                        // 执行4级任务
-                        this.executeTask(currentTask,101);
-                        console.log(currentTask.profile.accountName+`workId为101的任务`);
-                    }else if (currentTask.tierId >= 5 && this.tasks.find(task => task.workId === 12 && task.clubCount >= 10) || currentTask.tierId >= 5
-                        && this.tasks.find(task => task.workId === 11 && task.clubCount <= 10)) {
-                        // 执行5级任务
-                        this.executeTask(currentTask,11);
-                    }else if (currentTask.tierId >= 5 && this.tasks.find(task => task.workId === 11 && task.clubCount >= 10)|| currentTask.tierId >= 5
-                        && this.tasks.find(task => task.workId === 10 && task.clubCount <= 10)) {
-                        // 执行5级任务
-                        this.executeTask(currentTask,10);
-                    }else if (currentTask.tierId >= 4 && this.tasks.find(task => task.workId === 10 && task.clubCount >= 10)|| currentTask.tierId >= 4
-                        && this.tasks.find(task => task.workId === 9 && task.clubCount <= 10)) {
-                        // 执行4级任务
-                        this.executeTask(currentTask,9);
-                    }else if (currentTask.tierId >= 4 && this.tasks.find(task => task.workId === 9 && task.clubCount >= 10)|| currentTask.tierId >= 4
-                        && this.tasks.find(task => task.workId === 8 && task.clubCount <= 10)) {
-                        // 执行4级任务
-                        this.executeTask(currentTask,8);
-                        console.log(currentTask.profile.accountName+`workId为8的任务`);
-                    }else if (currentTask.tierId >= 3 && this.tasks.find(task => task.workId === 8 && task.clubCount >= 10)|| currentTask.tierId >= 3
-                        && this.tasks.find(task => task.workId === 7 && task.clubCount <= 10)) {
-                        // 执行3级任务
-                        this.executeTask(currentTask,7);
-                        console.log(currentTask.profile.accountName+`workId为7的任务`);
-                    } else if (currentTask.tierId >= 3 && this.tasks.find(task => task.workId === 7 && task.clubCount >= 10)|| currentTask.tierId >= 3
-                        && this.tasks.find(task => task.workId === 6 && task.clubCount <= 10)) {
-                        // 执行3级任务
-                        this.executeTask(currentTask,6);
-                        console.log(currentTask.profile.accountName+`workId为6的任务`);
-                    } else if (currentTask.tierId >= 2 && this.tasks.find(task => task.workId === 6 && task.clubCount >= 10)|| currentTask.tierId >= 3
-                        && this.tasks.find(task => task.workId === 5 && task.clubCount <= 10)) {
-                        // 执行2级任务
-                        this.executeTask(currentTask,5);
-                        console.log(currentTask.profile.accountName+`workId为5的任务`);
-                    } else if (currentTask.tierId >= 2 && this.tasks.find(task => task.workId === 5 && task.clubCount >= 10)|| currentTask.tierId >= 3
-                        && this.tasks.find(task => task.workId === 4 && task.clubCount <= 10)) {
-                        // 执行2级任务
-                        this.executeTask(currentTask,4);
-                        console.log(currentTask.profile.accountName+`workId为4的任务`);
-                    } else if (currentTask.tierId >= 1 && this.tasks.find(task => task.workId === 4 && task.clubCount >= 10)|| currentTask.tierId >= 3
-                        && this.tasks.find(task => task.workId === 3 && task.clubCount <= 10)) {
-                        // 执行1级任务
-                        this.executeTask(currentTask,3);
-                        console.log(currentTask.profile.accountName+`workId为3的任务`);
-                    } else if (currentTask.tierId >= 1 && this.tasks.find(task => task.workId === 3 && task.clubCount >= 10)|| currentTask.tierId >= 3
-                        && this.tasks.find(task => task.workId === 1 && task.clubCount <= 10)) {
-                        // 执行1级任务
-                        this.executeTask(currentTask,1);
-                        console.log(currentTask.profile.accountName+`workId为1的任务`);
-                    } else {
-                        console.log(currentTask.profile.accountName+`不能执行workId为${currentTask.workId}的任务`);
-                    }
-                }
-            }
-        },
-        // 获取每个等级挖矿占用的club数量
-        async friendtrade_dispatch_detail(userId) {
-            this.tasks=[]
-            const token=this.token;
-
-            for(let workId=12;workId>0;workId--){
-                await  fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_detail', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: token,
-                        emplyeeIds: [userId],
-                        workId: workId,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        if (!res.data.isLocked && res.data.canUnlock) {
-                            this.tasks.push({clubCount:res.data.curWorkingEmployeeNum,
-                                workId:res.data.workId});
-                        }
-                    });
-            }
-            await  fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_detail', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    token: token,
-                    emplyeeIds: [userId],
-                    workId: 101,
-                })
-            }).then(response => response.json())
-                .then(res => {
-                    if (!res.data.isLocked && res.data.canUnlock) {
-                        this.tasks.push({clubCount:res.data.curWorkingEmployeeNum,
-                            workId:res.data.workId})
-                    }
-                });
-            console.log(this.tasks);
-            //自动执行任务
-            this.autoExecuteTasks();
-            //刷新管理的club信息
-            this.getManagerClubInfo();
         },
         //获取个人下次提币的时间
         startCountdown() {
@@ -685,7 +580,7 @@ export default {
         },
 
         // 一键收矿
-         oreButton() {
+        oreButton() {
             const token=this.token
             if (this.userIdArray != null) {
                 this.userIdArray.forEach(async function (item, index, array) {
@@ -702,8 +597,48 @@ export default {
                         .then(res => {
                         });
                 })
-                alert("执行一键收矿成功");
-                this.getManagerClubInfo();
+                //一键挖矿
+                this.mintButton();
+                const userId=this.userId;
+                this.userIdArray=[];
+                this.userList=[];
+                fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/portfolio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: token,
+                    })
+                }).then(response => response.json())
+                    .then(res => {
+                        res.data.holding.forEach(e => {
+                            if (userId === e.managerId) {
+                                this.userList.push(e);
+                                this.userIdArray.push({userId: e.userId});
+                            }
+                        })
+                    });
+            }
+        },
+
+        // 一键挖矿
+       async mintButton() {
+            const token=this.token;
+            if (this.userIdList != null) {
+                console.log(this.userIdList)
+                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_batch_emplyees', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: token,
+                        emplyeeIds: this.userIdList,
+                    })
+                }).then(response => response.json())
+                    .then(res => {
+                    });
             }
         },
 
@@ -725,448 +660,47 @@ export default {
                 });
         },
 
-        // 自动挖矿
-        async automationMint(userId,workId){
+        // 一键自动挖矿
+        apeButton() {
             const token=this.token;
-            await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    emplyeeIds: [userId],
-                    token: token,
-                    workId: workId,
-                })
-            }).then(response => response.json())
-                .then(res => {
-                    console.log(res)
-                });
-        },
-
-        //自动挖1级
-        async automationOne(e){
-            const token=this.token;
-            //收矿
-            this.automationOreButton(e.userId);
-            //刷新管理club信息
-            this.getManagerClubInfo();
-            //补充能量
-            setTimeout(
-               await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/portfolio', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: token,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        res.data.holding.forEach(a => {
-                            if (a.userId === e.userId) {
-                                if(a.energy<10 && e.workId!==2){
-                                    this.automationMint(e.userId,2);
-                                    //刷新管理club信息
-                                    this.getManagerClubInfo();
-                                }
-                            }
+            if (this.userIdArray != null) {
+                this.userIdArray.forEach(async item=> {
+                    //收矿
+                    await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_takeworkcoin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: token,
+                            employeeId: item.userId,
                         })
-                    }), 1500);
-            //挖矿
-            await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    emplyeeIds: [e.userId],
-                    token: token,
-                    workId: 3,
-                })
-            }).then(response => response.json())
-                .then(res => {
-                    console.log(res,"挖1级成功")
+                    }).then(response => response.json())
+                        .then(res => {
+                            console.log("出圈社区Club🥇————收矿",res)
+                        });
+                    //挖矿
+                    await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_batch_emplyees', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: token,
+                            emplyeeIds: [item.userId],
+                        })
+                    }).then(response => response.json())
+                        .then(res => {
+                            console.log("出圈社区Club🥇————挖矿",res)
+                        });
                 });
-            //挖矿
-            setTimeout(this.automationMint(e.userId,3), 1500);
+                this.getManagerClubInfo();
+            }
+            // 一键自动挖矿
             setInterval(async () => {
-               await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        emplyeeIds: [e.userId],
-                        token: token,
-                        workId: 3,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        console.log(res,"挖1级成功")
-                    });
-                // 循环任务
-                setTimeout(this.automationOne(e),1500);
-                setTimeout(this.getManagerClubInfo(),4000);
-            },(18 * 60 * 1000)+3000);
+                await this.apeButton();
+            }, (10 * 60 * 1000)+3000); // 即每1小时执行一次
         },
-
-        //自动挖2级(EAS)
-        async automationTwo(e){
-            const token=this.token;
-            //收矿
-            this.automationOreButton(e.userId);
-            //刷新管理club信息
-            this.getManagerClubInfo();
-            //补充能量
-            setTimeout(
-               await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/portfolio', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: token,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        res.data.holding.forEach(a => {
-                            if (a.userId === e.userId) {
-                                if(a.energy<12 && e.workId!==2){
-                                    this.automationMint(e.userId,2);
-                                    //刷新管理club信息
-                                    this.getManagerClubInfo();
-                                }
-                            }
-                        })
-                    }), 1500);
-            //挖矿
-           await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    emplyeeIds: [e.userId],
-                    token: token,
-                    workId: 4,
-                })
-            }).then(response => response.json())
-                .then(res => {
-                    console.log(res,"挖2级(EAS)成功")
-                });
-            //挖矿
-            setTimeout(this.automationMint(e.userId,4), 1500);
-            setInterval(async() => {
-               await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        emplyeeIds: [e.userId],
-                        token: token,
-                        workId: 4,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        console.log(res,"挖2级(EAS)成功")
-                    });
-                //循环任务
-                setTimeout(this.automationTwo(e),1500);
-                setTimeout(this.getManagerClubInfo(),4000);
-            },(30 * 60 * 1000)+3000);
-        },
-
-        //自动挖2级(BMCL)
-        async automationTwoMint(e){
-            const token=this.token;
-            //收矿
-            this.automationOreButton(e.userId);
-            //刷新管理club信息
-            this.getManagerClubInfo();
-            //补充能量
-            setTimeout(
-              await  fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/portfolio', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: token,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        res.data.holding.forEach(a => {
-                            if (a.userId === e.userId) {
-                                if(a.energy<15 && e.workId!==2){
-                                    this.automationMint(e.userId,2);
-                                    //刷新管理club信息
-                                    this.getManagerClubInfo();
-                                }
-                            }
-                        })
-                    }), 1500);
-            //挖矿
-            await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    emplyeeIds: [e.userId],
-                    token: token,
-                    workId: 5,
-                })
-            }).then(response => response.json())
-                .then(res => {
-                    console.log(res,"挖2级(BMCL)成功")
-                });
-            //挖矿
-            setTimeout(this.automationMint(e.userId,5), 1500);
-            setInterval(async() => {
-                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        emplyeeIds: [e.userId],
-                        token: token,
-                        workId: 5,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        console.log(res,"挖2级(BMCL)成功")
-                    });
-                //循环任务
-                setTimeout(this.automationTwoMint(e),1500);
-                setTimeout(this.getManagerClubInfo(),4000);
-            },(60 * 60 * 1000)+3000);
-        },
-
-        //自动挖3级(APE)
-        async automationThree(e){
-            const token=this.token;
-            //收矿
-            this.automationOreButton(e.userId);
-            //刷新管理club信息
-            this.getManagerClubInfo();
-            setTimeout(
-                //补充能量
-              await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/portfolio', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: token,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        res.data.holding.forEach(a => {
-                            if (a.userId === e.userId) {
-                                if(a.energy<20 && e.workId!==2){
-                                    this.automationMint(e.userId,2);
-                                    //刷新管理club信息
-                                    this.getManagerClubInfo();
-                                }
-                            }
-                        })
-                    }), 1500);
-            //挖矿
-           await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    emplyeeIds: [e.userId],
-                    token: token,
-                    workId: 6,
-                })
-            }).then(response => response.json())
-                .then(res => {
-                    console.log(res,"挖3级(APE)成功")
-                });
-            //挖矿
-            setTimeout(this.automationMint(e.userId,6), 1500);
-            setInterval(async() => {
-               await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        emplyeeIds: [e.userId],
-                        token: token,
-                        workId: 6,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        console.log(res,"挖3级(APE)成功")
-                    });
-                // 循环任务
-                setTimeout(this.automationThree(e),1500);
-                setTimeout(this.getManagerClubInfo(),4000);
-            },(4 * 60 * 60 * 1000)+3000);
-        },
-
-        //自动挖3级(SEC)
-        async automationThreeMint(e){
-            const token=this.token;
-            //收矿
-            this.automationOreButton(e.userId);
-            //刷新管理club信息
-            this.getManagerClubInfo();
-            //补充能量
-            setTimeout(
-               await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/portfolio', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: token,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        res.data.holding.forEach(a => {
-                            if (a.userId === e.userId) {
-                                if(a.energy<20 && e.workId!==2){
-                                    this.automationMint(e.userId,2);
-                                    //刷新管理club信息
-                                    this.getManagerClubInfo();
-                                }
-                            }
-                        })
-                    }),1500);
-            //挖矿
-            await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    emplyeeIds: [e.userId],
-                    token: token,
-                    workId: 7,
-                })
-            }).then(response => response.json())
-                .then(res => {
-                    console.log(res,"挖3级(SEC)成功")
-                });
-            //挖矿
-            setTimeout(this.automationMint(e.userId,7), 1500);
-            setInterval(async() => {
-              await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        emplyeeIds: [e.userId],
-                        token: token,
-                        workId: 7,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        console.log(res,"挖3级(SEC)成功")
-                    });
-                // 循环任务
-                setTimeout(this.automationThreeMint(e),1500);
-                setTimeout(this.getManagerClubInfo(),4000);
-            },(4 * 60 * 60 * 1000)+3000);
-        },
-
-        //自动挖4级(SEC)
-        async automationFourMint(e){
-            const token=this.token;
-            //收矿
-            this.automationOreButton(e.userId);
-            //刷新管理club信息
-            this.getManagerClubInfo();
-            //补充能量
-            setTimeout(
-               await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/portfolio', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: token,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        res.data.holding.forEach(a => {
-                            if (a.userId === e.userId) {
-                                if(a.energy<35 && e.workId!==2){
-                                    debugger
-                                    this.automationMint(e.userId,2);
-                                    //刷新管理club信息
-                                    this.getManagerClubInfo();
-                                }
-                            }
-                        })
-                    }), 1500);
-            //挖矿
-            await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    emplyeeIds: [e.userId],
-                    token: token,
-                    workId: 8,
-                })
-            }).then(response => response.json())
-                .then(res => {
-                    console.log(res,"挖4级(ZSH)成功")
-                });
-            //挖矿
-            setTimeout(this.automationMint(e.userId,8), 1500);
-            setInterval(async() => {
-               await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        emplyeeIds: [e.userId],
-                        token: token,
-                        workId: 8,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        console.log(res,"挖4级(ZSH)成功")
-                    });
-                // 循环任务
-                setTimeout(this.automationFourMint(e),1500);
-                setTimeout(this.getManagerClubInfo(),4000);
-            },(6 * 60 * 60 * 1000)+3000);
-        },
-
-        // 单个补充能量
-        async energyTButton(e) {
-            const token=this.token
-           await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    workId: 2,
-                    token: token,
-                    emplyeeIds: [e.userId],
-                })
-            }).then(response => response.json())
-                .then(res => {
-                });
-            alert(e.profile.accountName+"Club执行补充能量成功");
-            this.getManagerClubInfo();
-        },
-
         // 一键补充能量
         energyButton() {
             const token=this.token
@@ -1386,48 +920,6 @@ export default {
                 alert("执行一键挖3级矿成功");
                 this.getManagerClubInfo();
             }
-        },
-
-        // 一键自动挖3级矿
-        apeButton() {
-            const token=this.token;
-            if (this.userIdArray != null) {
-                this.userIdArray.forEach(async item=> {
-                    //收矿
-                   await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_takeworkcoin', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            token: token,
-                            employeeId: item.userId,
-                        })
-                    }).then(response => response.json())
-                        .then(res => {
-                            this.getManagerClubInfo();
-                            console.log("出圈社区Club🥇————收矿",res)
-                        });
-                  await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            emplyeeIds: [item.userId],
-                            token: token,
-                            workId: 6,
-                        })
-                    }).then(response => response.json())
-                        .then(res => {
-                        });
-                });
-                this.getManagerClubInfo();
-            }
-            // 一键自动挖3级矿
-            setInterval(async () => {
-                await this.apeButton();
-            }, (60 * 60 * 1000)+3000); // 即每1小时执行一次
         },
 
         // 一键挖3级矿
