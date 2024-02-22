@@ -20,14 +20,14 @@
             ></textarea>
         </div>
         <div class="button-container">
-            <button class="custom-button" @click="goBack()">返回首页</button>
             <button @click="handleInput" class="custom-button">获取个人信息</button>
+            <button class="custom-button" @click="startTaskExecution()">开始任务执行</button>
+            <button class="custom-button" @click="stopTaskExecution()">停止任务执行</button>
             <button @click="oreFriendtrade_takecoin" class="custom-button">一键提币</button>
             <button @click="auto_takecoin" class="custom-button">自动提币</button>
             <button @click="oreBooster" class="custom-button">一键使用Booster翻倍卡</button>
             <button @click="oreAutoBooster" class="custom-button">一键自动使用Booster翻倍卡</button>
-            <button class="custom-button" @click="startTaskExecution()">开始任务执行</button>
-            <button class="custom-button" @click="stopTaskExecution()">停止任务执行</button>
+            <button class="custom-button" @click="goBack()">返回首页</button>
         </div>
         <h2>管理的Club信息</h2>
         <h4>使用说明和相关解释：</h4>
@@ -133,7 +133,7 @@
             }
         },
         created() {
-            setInterval(this.handleInput(), 120000); // 每分钟执行一次任务
+            setInterval(this.handleInput(), 360000); // 每分钟执行一次任务
         },
         methods: {
             //获取个人信息
@@ -204,29 +204,6 @@
             stopTaskExecution() {
                 clearInterval(this.intervalId); // 停止定时任务执行
             },
-            //判断能量是否足够
-            isEnergyLess(currentTask) {
-                console.log("能量",currentTask.userId)
-                if(currentTask.energy<20 && currentTask.tierId===3){
-                    console.log(currentTask.energy,"任务3");
-                    return currentTask.energy < 20;
-                }else if(currentTask.energy<35 && currentTask.tierId===4){
-                    console.log(currentTask.energy,"任务4");
-                    return currentTask.energy < 35;
-                }else if(currentTask.energy<35 && currentTask.tierId===5){
-                    console.log(currentTask.energy,"任务5");
-                    return currentTask.energy < 35;
-                }else if(currentTask.energy<35 && currentTask.tierId===6){
-                    console.log(currentTask.energy,"任务6");
-                    return currentTask.energy < 35;
-                }else if(currentTask.energy<35 && currentTask.tierId===7){
-                    console.log(currentTask.energy,"任务7");
-                    return currentTask.energy < 35;
-                }else if(currentTask.energy<35 && currentTask.tierId===8){
-                    console.log(currentTask.energy,"任务8");
-                    return currentTask.energy < 35;
-                }
-            },
             // 自动收矿
             async automationOreButton(token,userId){
                 await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_takeworkcoin', {
@@ -243,44 +220,19 @@
                         console.log("出圈社区Club🥇————收矿",res)
                     });
             },
-            //恢复能量
-            async executeEnergyRecoveryTask(token,e) {
-                //收矿
-                this.automationOreButton(e.userId);
-                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
+            // 自动挖矿
+            async automationMintButton(token,userId){
+                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_batch_emplyees', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        workId: 2,
                         token: token,
-                        emplyeeIds: [e.userId],
+                        emplyeeIds: [userId],
                     })
                 }).then(response => response.json())
                     .then(res => {
-                    });
-                // 执行能量回复任务的逻辑
-                console.log(e.profile.accountName+'执行能量回复任务');
-            },
-            //执行挖矿
-            async executeTask(token,user,workId) {
-                //收矿
-                this.automationOreButton(token,user.userId);
-                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_emplyees', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        emplyeeIds: [user.userId],
-                        token: token,
-                        workId: workId,
-                    })
-                }).then(response => response.json())
-                    .then(res => {
-                        // 执行具体的任务逻辑
-                        console.log(user.profile.accountName+`执行任务：workId ${workId}`+res);
                     });
             },
             //自动执行任务
@@ -289,107 +241,13 @@
                     const currentTask = this.userList[i];
                     //收矿
                     this.automationOreButton(token,currentTask.userId);
-                    if (this.isEnergyLess(currentTask)) {
-                        this.executeEnergyRecoveryTask(token,currentTask);
-                    } else {
-                        if (currentTask.tierId >= 4 && this.tasks.find(task => task.workId === 101 && task.clubCount <= 1  && task.token === token )) {
-                            // 执行4级任务
-                            this.executeTask(token,currentTask,101);
-                            console.log(currentTask.profile.accountName+`workId为101的任务`);
-                        }else if (currentTask.tierId >= 5 && this.tasks.find(task => task.workId === 12 && task.clubCount >= 10  && task.token === token ) || currentTask.tierId >= 5
-                            && this.tasks.find(task => task.workId === 11 && task.clubCount <= 10  && task.token === token )) {
-                            // 执行5级任务
-                            this.executeTask(token,currentTask,11);
-                        }else if (currentTask.tierId >= 5 && this.tasks.find(task => task.workId === 11 && task.clubCount >= 10  && task.token === token )|| currentTask.tierId >= 5
-                            && this.tasks.find(task => task.workId === 10 && task.clubCount <= 10  && task.token === token )) {
-                            // 执行5级任务，前提是5级任务已经占满了10个club
-                            this.executeTask(token,currentTask,10);
-                        }else if (currentTask.tierId >= 4 && this.tasks.find(task => task.workId === 10 && task.clubCount >= 10  && task.token === token )|| currentTask.tierId >= 4
-                            && this.tasks.find(task => task.workId === 9 && task.clubCount <= 10  && task.token === token )) {
-                            // 执行4级任务，前提是5级任务已经占满了10个club
-                            this.executeTask(token,currentTask,9);
-                        }else if (currentTask.tierId >= 4 && this.tasks.find(task => task.workId === 9 && task.clubCount >= 10  && task.token === token )|| currentTask.tierId >= 4
-                            && this.tasks.find(task => task.workId === 8 && task.clubCount <= 10  && task.token === token )) {
-                            // 执行4级任务，前提是4级任务已经占满了10个club
-                            this.executeTask(token,currentTask,8);
-                            console.log(currentTask.profile.accountName+`workId为8的任务`);
-                        }else if (currentTask.tierId >= 3 && this.tasks.find(task => task.workId === 8 && task.clubCount >= 10  && task.token === token )|| currentTask.tierId >= 3
-                            && this.tasks.find(task => task.workId === 7 && task.clubCount <= 10  && task.token === token )) {
-                            // 执行3级任务，前提是4级任务已经占满了10个club
-                            this.executeTask(token,currentTask,7);
-                            console.log(currentTask.profile.accountName+`workId为7的任务`);
-                        } else if (currentTask.tierId >= 3 && this.tasks.find(task => task.workId === 7 && task.clubCount >= 10  && task.token === token) || currentTask.tierId >= 3
-                            && this.tasks.find(task => task.workId === 6 && task.clubCount <= 10  && task.token === token)) {
-                            // 执行3级任务，前提是3级任务已经占满了10个club
-                            this.executeTask(token,currentTask,6);
-                            console.log(currentTask.profile.accountName+`workId为6的任务`);
-                        } else if (currentTask.tierId >= 2 && this.tasks.find(task => task.workId === 6 && task.clubCount >= 10  && task.token === token) || currentTask.tierId >= 3
-                            && this.tasks.find(task => task.workId === 5 && task.clubCount <= 10  && task.token === token)) {
-                            // 执行2级任务，前提是3级任务已经占满了10个club
-                            this.executeTask(token,currentTask,5);
-                            console.log(currentTask.profile.accountName+`workId为5的任务`);
-                        } else if (currentTask.tierId >= 2 && this.tasks.find(task => task.workId === 5 && task.clubCount >= 10  && task.token === token) || currentTask.tierId >= 3
-                            && this.tasks.find(task => task.workId === 4 && task.clubCount <= 10  && task.token === token)) {
-                            // 执行2级任务，前提是2级任务已经占满了10个club
-                            this.executeTask(token,currentTask,4);
-                            console.log(currentTask.profile.accountName+`workId为4的任务`);
-                        } else if (currentTask.tierId >= 1 && this.tasks.find(task => task.workId === 4 && task.clubCount >= 10  && task.token === token) || currentTask.tierId >= 3
-                            && this.tasks.find(task => task.workId === 3 && task.clubCount <= 10  && task.token === token)) {
-                            // 执行1级任务，前提是2级任务已经占满了10个club
-                            this.executeTask(token,currentTask,3);
-                            console.log(currentTask.profile.accountName+`workId为3的任务`);
-                        } else if (currentTask.tierId >= 1 && this.tasks.find(task => task.workId === 3 && task.clubCount >= 10  && task.token === token) || currentTask.tierId >= 3
-                            && this.tasks.find(task => task.workId === 1 && task.clubCount <= 10  && task.token === token)) {
-                            // 执行1级任务，前提是2级任务已经占满了10个club
-                            this.executeTask(token,currentTask,1);
-                            console.log(currentTask.profile.accountName+`workId为1的任务`);
-                        } else {
-                            console.log(currentTask.profile.accountName+`不能执行workId为${currentTask.workId}的任务`);
-                        }
-                    }
+                    //挖矿
+                    this.automationMintButton(token,currentTask.userId);
                 }
             },
             // 获取每个等级挖矿占用的club数量
             friendtrade_dispatch_detail() {
-                this.tasks=[];
                 this.userMap.forEach(async (userId, token) => {
-                    for(let workId=12;workId>0;workId--){
-                        await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_detail', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                token: token,
-                                emplyeeIds: [userId],
-                                workId: workId,
-                            })
-                        }).then(response => response.json())
-                            .then(res => {
-                                if (!res.data.isLocked && res.data.canUnlock) {
-                                    this.tasks.push({token:token,clubCount:res.data.curWorkingEmployeeNum,
-                                        workId:res.data.workId});
-                                }
-                            });
-                    }
-                    await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_dispatch_detail', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            token: token,
-                            emplyeeIds: [userId],
-                            workId: 101,
-                        })
-                    }).then(response => response.json())
-                        .then(res => {
-                            if (!res.data.isLocked && res.data.canUnlock) {
-                                this.tasks.push({token:token,clubCount:res.data.curWorkingEmployeeNum,
-                                    workId:res.data.workId});
-                            }
-                        });
-                    console.log(token,this.tasks)
                     //自动执行任务
                     this.autoExecuteTasks(token);
                 });
