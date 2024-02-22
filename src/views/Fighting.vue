@@ -22,42 +22,46 @@
                 <th>购买钥匙ID</th>
                 <th>等级</th>
                 <th>Power</th>
-                <th>LFG代币数量</th>
+                <th>战斗积分</th>
+                <th>战斗等级</th>
+                <th>锁定LFG代币数量</th>
+                <th>可索赔LFG解锁代币数量</th>
+                <th>每日解锁LFG代币数量</th>
+                <th>背包LFG代币数量</th>
                 <th>矿池LFG代币数量</th>
                 <th>UP数量</th>
                 <th>马蹄数量</th>
             </tr>
             <tbody>
-            <tr v-for="item in userInfoList" :key="item.id">
-                <td>
-                    <span v-if="item.platformData.platformMap['1'] === undefined ">{{item.platformData.defaultName}}</span>
-                    <span v-else>{{item.platformData.platformMap["1"].displayName}}</span>
-                </td>
-                <td>
-                    <span v-if="item.platformData.platformMap['1'] === undefined ">{{item.platformData.defaultName}}</span>
-                    <span v-else>{{item.platformData.platformMap["1"].accountName}}</span>
-                </td>
-                <td>
-                    <span v-if="item.selfData.tierId=== 1"><img src="../assets/img/1.jpg" alt='1级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 2"><img src="../assets/img/2.jpg" alt='2级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 3"><img src="../assets/img/3.jpg" alt='3级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 4"><img src="../assets/img/4.jpg" alt='4级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 5"><img src="../assets/img/5.jpg" alt='5级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 6"><img src="../assets/img/6.jpg" alt='6级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 7"><img src="../assets/img/7.jpg" alt='7级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 8"><img src="../assets/img/8.jpg" alt='8级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 9"><img src="../assets/img/9.jpg" alt='9级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 10"><img src="../assets/img/10.jpg" alt='10级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 11"><img src="../assets/img/11.jpg" alt='11级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 12"><img src="../assets/img/12.jpg" alt='12级' class='icon'></span>
-                    <span v-else-if="item.selfData.tierId=== 13"><img src="../assets/img/13.jpg" alt='13级' class='icon'></span>
-                </td>
-                <td>{{ item.selfData.power }}</td>
-                <td><img src="../assets/img/lfg.jpg" alt='lfg背包' class='icon'>{{ item.selfData.vCoin }}</td>
-                <td><img src="../assets/img/lfg.jpg" alt='lfg矿池' class='icon'>{{ item.selfData.claimCoin }}</td>
-                <td><img src="../assets/img/up.jpg" alt='up' class='icon'>{{ item.selfData.points }}</td>
-                <td><img src="../assets/img/matic.jpg" alt='马蹄' class='icon'>{{ item.selfData.balance.substring(0, 7) }}</td>
-            </tr>
+                <tr v-for="item in userInfoList" :key="item.id">
+                    <td>{{item.displayName}}</td>
+                    <td>{{item.accountName}}</td>
+                    <td>
+                        <span v-if="item.tierId=== 1"><img src="../assets/img/1.jpg" alt='1级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 2"><img src="../assets/img/2.jpg" alt='2级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 3"><img src="../assets/img/3.jpg" alt='3级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 4"><img src="../assets/img/4.jpg" alt='4级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 5"><img src="../assets/img/5.jpg" alt='5级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 6"><img src="../assets/img/6.jpg" alt='6级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 7"><img src="../assets/img/7.jpg" alt='7级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 8"><img src="../assets/img/8.jpg" alt='8级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 9"><img src="../assets/img/9.jpg" alt='9级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 10"><img src="../assets/img/10.jpg" alt='10级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 11"><img src="../assets/img/11.jpg" alt='11级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 12"><img src="../assets/img/12.jpg" alt='12级' class='icon'></span>
+                        <span v-else-if="item.tierId=== 13"><img src="../assets/img/13.jpg" alt='13级' class='icon'></span>
+                    </td>
+                    <td>{{ item.power }}</td>
+                    <td><img src="../assets/img/battlePoint_icon.jpg" alt='战斗积分' class='icon'>{{ item.battlePoints }}</td>
+                    <td>{{ item.battlePointLevel }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='锁定lfg' class='icon'>{{ item.virtualLFG }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='可索赔lfg' class='icon'>{{ item.withDrawableLfg }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='每日解锁lfg' class='icon'>{{ item.releaseLfgPerDay }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='lfg背包' class='icon'>{{ item.lfgBalance }}</td>
+                    <td><img src="../assets/img/lfg.jpg" alt='lfg矿池' class='icon'>{{ item.claimCoin }}</td>
+                    <td><img src="../assets/img/up.jpg" alt='up' class='icon'>{{ item.points }}</td>
+                    <td><img src="../assets/img/matic.jpg" alt='马蹄' class='icon'>{{ item.balance }}</td>
+                </tr>
             </tbody>
         </table>
         <h2>指定攻击对象功能</h2>
@@ -381,10 +385,11 @@
                 clubLevelHigh: 5,
                 token: '',
                 userId: '',
-                userDisplayName: '',
                 employeeId: '',
+                orderId: '',
                 succRatio: '',
                 crackSelfCoin: '',
+                inputData: '',
                 countingDown: false,
                 dialogVisible: false,
                 showLogInfo: false,
@@ -424,9 +429,8 @@
                     .then(res => {
                         const userInfo = res.data;
                         this.multiplyCardNum = res.data.selfData.multiplyCardNum;
-                        this.userInfoList.push(userInfo);
+                        this.updateUserInfoList(userInfo, token);
                         this.userId = userInfo.userId;
-                        this.userDisplayName = userInfo.platformData.platformMap["1"].displayName;
 
                         this.earnInfo(); //获取个人下次提币的时间
                     });
@@ -448,6 +452,117 @@
                         })
                     });
                 this.selectFight();
+            },
+            //获取背包代币信息
+            async friendtrade_virtual_lfg(userInfo, token) {
+                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_virtual_lfg', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: token
+                    })
+                })
+                    .then(response => response.json())
+                    .then(res => {
+                        console.log(res)
+                        if(res.data.virtualLFG>0 && res.data.lfgUnlockStatus===1){
+                            this.updateUserInfoList(userInfo, token,res.data.virtualLFG);
+                        }else {
+                            this.userInfoList.push({
+                                withDrawableLfg: 0,
+                                releaseLfgPerDay: 0,
+                                virtualLFG: 0,
+                                userId: userInfo.userId,
+                                token: token,
+                                multiplyCardNum: userInfo.selfData.multiplyCardNum,
+                                displayName: userInfo.platformData.defaultName,
+                                accountName: userInfo.platformData.defaultName,
+                                tierId: userInfo.selfData.tierId,
+                                power: userInfo.selfData.power,
+                                lfgBalance: userInfo.selfData.lfgBalance,
+                                claimCoin: userInfo.selfData.claimCoin,
+                                points: userInfo.selfData.points,
+                                battlePoints: userInfo.selfData.battlePoints,
+                                battlePointLevel: userInfo.selfData.battlePointLevel,
+                                balance: userInfo.selfData.balance.substring(0, 7),
+                            });
+                        }
+                    });
+            },
+            //存储个人信息数组
+            async updateUserInfoList(userInfo, token,virtualLFG) {
+                if (userInfo.platformData.platformMap[1] === undefined) {
+                    await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_virtual_lfg', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: token
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(res => {
+                            console.log(res)
+                            if(res.data.virtualLFG>0){
+                                this.userInfoList.push({
+                                    withDrawableLfg: res.data.withDrawableLfg,
+                                    releaseLfgPerDay: res.data.releaseLfgPerDay,
+                                    virtualLFG: virtualLFG,
+                                    userId: userInfo.userId,
+                                    token: token,
+                                    multiplyCardNum: userInfo.selfData.multiplyCardNum,
+                                    displayName: userInfo.platformData.defaultName,
+                                    accountName: userInfo.platformData.defaultName,
+                                    tierId: userInfo.selfData.tierId,
+                                    power: userInfo.selfData.power,
+                                    lfgBalance: userInfo.selfData.lfgBalance,
+                                    claimCoin: userInfo.selfData.claimCoin,
+                                    points: userInfo.selfData.points,
+                                    battlePoints: userInfo.selfData.battlePoints,
+                                    battlePointLevel: userInfo.selfData.battlePointLevel,
+                                    balance: userInfo.selfData.balance.substring(0, 7),
+                                });
+                            }
+                        });
+                } else {
+                    await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_virtual_lfg', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: token
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(res => {
+                            console.log(res)
+                            if(res.data.virtualLFG>0){
+                                this.userInfoList.push({
+                                    withDrawableLfg: res.data.withDrawableLfg,
+                                    releaseLfgPerDay: res.data.releaseLfgPerDay,
+                                    virtualLFG: virtualLFG,
+                                    userId: userInfo.userId,
+                                    token: token,
+                                    multiplyCardNum: userInfo.selfData.multiplyCardNum,
+                                    displayName: userInfo.platformData.platformMap[1].displayName,
+                                    accountName: userInfo.platformData.platformMap[1].accountName,
+                                    tierId: userInfo.selfData.tierId,
+                                    power: userInfo.selfData.power,
+                                    lfgBalance: userInfo.selfData.lfgBalance,
+                                    claimCoin: userInfo.selfData.claimCoin,
+                                    points: userInfo.selfData.points,
+                                    battlePoints: userInfo.selfData.battlePoints,
+                                    battlePointLevel: userInfo.selfData.battlePointLevel,
+                                    balance: userInfo.selfData.balance.substring(0, 7),
+                                });
+                            }
+                        });
+                }
+                console.log("个人集合信息", this.userInfoList);
             },
             //查看指定攻击的club等级信息
             async selectFightDesignation(){
@@ -636,38 +751,58 @@
                 const putCoin =this.stepValue;
                 const userId =this.userId;
                 const employeeId =this.employeeId;
-                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_loot_crack', {
+                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_chain_lootcrack', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        amount: putCoin,
+                        costType: 1,
                         token: token,
-                        putCoin: putCoin,
                         employeeId: employeeId,
                         tarUserId: userId,
                     })
                 }).then(response => response.json())
                     .then(res => {
-                        if(res.code!==0){
-                            alert(this.title+"攻击未执行"+"接口出现错误:错误码"+res.code);
-                        }else {
-                            if(res.data.succ){
-                                alert("攻击"+this.title+"成功");
-                            }else {
-                                alert("攻击"+this.title+",打输了");
-                            }
-                            this.succ=res.data.succ;
-                            this.battlePoint=res.data.battlePoint;
-                            this.lootCoin=res.data.lootCoin;
-                            this.selfTakeCoin=res.data.selfTakeCoin;
-                            this.lootLog.push(res.data);
-                            sessionStorage.setItem('lootLogList', JSON.stringify(this.lootLog));
-                        }
+                        const orderId=res.data.orderId;
+                        console.log(orderId);
+                        // if(res.code!==0){
+                        //     alert(this.title+"攻击未执行"+"接口出现错误:错误码"+res.code);
+                        // }else {
+                        //     if(res.data.succ){
+                        //         alert("攻击"+this.title+"成功");
+                        //     }else {
+                        //         alert("攻击"+this.title+",打输了");
+                        //     }
+                        //     this.succ=res.data.succ;
+                        //     this.battlePoint=res.data.battlePoint;
+                        //     this.lootCoin=res.data.lootCoin;
+                        //     this.selfTakeCoin=res.data.selfTakeCoin;
+                        //     this.lootLog.push(res.data);
+                        //     sessionStorage.setItem('lootLogList', JSON.stringify(this.lootLog));
+                        // }
                     });
                 this.showInfo=false;
                 this.dialogVisible=false;
                 this.getUserInfo();
+            },
+            //打架结果
+            async friendTrade_Result(orderId){
+                const token =this.token;
+                await fetch('https://turnup-uw-test-apiv2.turnup.so/api/v1/friendtrade_chain_orderresult', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        token: token,
+                    })
+                }).then(response => response.json())
+                    .then(res => {
+                        console.log(res.data)
+                    });
             },
             //打架日志
             async lootLogInfo(){
@@ -866,7 +1001,43 @@
                 }else {
                     return ""
                 }
-            }
+            },
+            //id 42
+            async eth_chainId() {
+                await fetch('https://polygon-mainnet.infura.io/v3/4df5e2316331463a9130964bd6078dfa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: 42,
+                        params: [],
+                        jsonrpc: "2.0",
+                        method: "eth_chainId",
+                    })
+                }).then(response => response.json())
+                    .then(res => {
+                        console.log(res.result,"0x89")
+                    });
+            },
+            //id 43
+            async eth_getTransactionCount() {
+                await fetch('https://polygon-mainnet.infura.io/v3/4df5e2316331463a9130964bd6078dfa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: 43,
+                        params:["0x065c9ff35fdd84bb1e713372e575009d8a34260e", "pending"],
+                        jsonrpc: "2.0",
+                        method: "eth_getTransactionCount",
+                    })
+                }).then(response => response.json())
+                    .then(res => {
+                        console.log(res.result,"0x178")
+                    });
+            },
         }
     }
 </script>
